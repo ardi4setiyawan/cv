@@ -8,10 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/tengbao/vanta@latest/dist/vanta.globe.min.js"></script> 
-
+    
     <style>
         /* RESET DASAR */
         * {
@@ -32,9 +29,8 @@
         /* 1. SETUP BODY & SCROLLING */
         html, body {
             width: 100%;
-            /* Ganti font utama untuk body */
-            font-family: 'Unbounded', sans-serif; 
-            font-weight: 400; /* Weight standar untuk body */
+            font-family: 'Unbounded', sans-serif;
+            font-weight: 400;
             color: var(--text-color);
             background-color: transparent; 
             overflow-y: auto; 
@@ -50,6 +46,8 @@
             width: 100%;
             height: 100%;
             z-index: -1; 
+            /* Fallback warna statis */
+            background-color: var(--bg-color); 
         }
 
         /* 3. KONTEN UTAMA */
@@ -70,7 +68,7 @@
             background: var(--container-bg); 
             padding: 40px;
             border-radius: 12px;
-            /* Efek Kaca Buram */
+            /* Efek Kaca Buram Standar Desktop */
             backdrop-filter: blur(8px); 
             -webkit-backdrop-filter: blur(8px);
             box-shadow: 0 4px 40px var(--shadow-color); 
@@ -78,14 +76,13 @@
         }
 
         /* 4. TYPOGRAPHY & HEADER */
-        /* Font Unbounded untuk H1 (dipertebal agar menonjol) */
         h1 { 
             font-size: 3em; 
             margin-bottom: 5px; 
             color: var(--accent-color); 
             text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); 
             font-family: 'Unbounded', sans-serif;
-            font-weight: 700; /* Lebih tebal */
+            font-weight: 700;
         }
         .role {  font-size: 1.3em; font-weight: 400; margin-bottom: 25px; color: #333; }
         .summary {  font-size: 1.1em; margin-bottom: 25px; padding-bottom: 10px; border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
@@ -163,7 +160,7 @@
             background: rgba(135, 0, 210, 0.05); 
             border-radius: 25px;
             
-            /* Efek Asimetris dan Blur Kunci Web3 */
+            /* Efek Asimetris dan Blur Kunci Web3 Desktop */
             transform: rotate(-1.5deg); 
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
@@ -264,10 +261,14 @@
             padding-top: 10px;
         }
         
-        /* 9. RESPONSIVENESS FIX */
+        /* 9. RESPONSIVENESS FIX & MOBILE OPTIMIZATION */
         @media (max-width: 768px) {
-            .resume-container { padding: 25px; }
-            /* Ganti Font Size di Mobile agar tidak terlalu besar */
+            .resume-container { 
+                padding: 25px; 
+                /* Kurangi blur di mobile untuk performa */
+                backdrop-filter: blur(3px); 
+                -webkit-backdrop-filter: blur(3px);
+            }
             h1 { font-size: 2.2em; }
             .details-layout { grid-template-columns: 1fr; } 
             
@@ -277,6 +278,9 @@
                 border-radius: 10px;
                 left: 0;
                 right: 0;
+                /* Kurangi blur di background section */
+                backdrop-filter: blur(3px);
+                -webkit-backdrop-filter: blur(3px);
             }
             
             /* Grid Pengalaman Kerja (Mobile) */
@@ -478,27 +482,54 @@
 
     <script>
     // ==================================
-    // SCRIPT VANTA.JS
-    // ==================================
-    VANTA.GLOBE({
-      el: "#vanta-background", 
-      mouseControls: true,
-      touchControls: true,
-      gyroControls: false,
-      minHeight: 200.00,
-      minWidth: 200.00,
-      scale: 1,
-      scaleMobile: 0.2,
-      color: 0x8700d2,      
-      color2: 0x4e17d4,      
-      backgroundColor: 0xfdfdff 
-    });
-
-
-    // ==================================
-    // JAVASCRIPT UNTUK SMOOTH SLIDE (FINAL)
+    // JAVASCRIPT UNTUK SMOOTH SLIDE & OPTIMASI VANTA
     // ==================================
     document.addEventListener('DOMContentLoaded', () => {
+        
+        // ==================================
+        // 1. OPTIMASI VANTA.JS (DYNAMIC LOADING DENGAN KONFIGURASI MOBILE)
+        // ==================================
+        function loadScript(url, callback) {
+            const script = document.createElement('script');
+            script.src = url;
+            script.async = false; 
+            if (callback) {
+                script.onload = callback;
+            }
+            document.head.appendChild(script);
+        }
+
+        // Konfigurasi Vanta.js default (Desktop)
+        let vantaConfig = {
+            el: "#vanta-background", 
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            color: 0x8700d2,      
+            color2: 0x4e17d4,      
+            backgroundColor: 0xfdfdff,
+            scale: 1.00,
+            scaleMobile: 1.00 
+        };
+
+        // Atur skala lebih rendah untuk mobile (dibawah 768px)
+        if (window.innerWidth <= 768) {
+            vantaConfig.scale = 0.50;      // Kurangi skala objek 3D di HP
+            vantaConfig.scaleMobile = 0.50; // Kurangi skala objek 3D di HP
+        }
+
+        // Muat Three.js, lalu Vanta.js, lalu inisialisasi Vanta
+        loadScript("https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js", () => {
+            loadScript("https://cdn.jsdelivr.net/gh/tengbao/vanta@latest/dist/vanta.globe.min.js", () => {
+                VANTA.GLOBE(vantaConfig);
+            });
+        });
+        
+        // ==================================
+        // 2. JAVASCRIPT UNTUK SMOOTH SLIDE
+        // ==================================
         const detailsElements = document.querySelectorAll('.main-collapse-wrapper');
 
         detailsElements.forEach(details => {
