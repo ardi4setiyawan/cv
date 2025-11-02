@@ -3,593 +3,444 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resume | Ardi Setiyawan</title>
+    <title>CV Ardi Setiyawan - Final Interaktif & Print A4</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
     
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.22/fullpage.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.halo.min.js"></script>
+
     <style>
-        /* RESET DASAR */
+        /* Variabel Warna */
+        :root {
+            --color-main: #FFFFFF;
+            --color-accent: #00ff55;
+            --color-dark-bg: #000000;
+        }
+
+        /* RESET DAN PENGATURAN UTAMA */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
-        :root {
-            --text-color: #1a1a1a;      
-            --bg-color: #fdfdff;      
-            --accent-color: #8700d2; 
-            --accent-dark: #550085;  
-            --shadow-color: rgba(135, 0, 210, 0.2); 
-            --container-bg: rgba(255, 255, 255, 0.2); 
-        }
-
-        /* 1. SETUP BODY & SCROLLING */
-        html, body {
-            width: 100%;
+        
+        body {
+            height: 100%; 
             font-family: 'Unbounded', sans-serif;
-            font-weight: 400;
-            color: var(--text-color);
-            background-color: transparent; 
-            overflow-y: auto; 
-            overflow-x: hidden;
-            position: relative;
+            line-height: 1.5;
+            color: var(--color-main); 
+            font-weight: 400; 
+            background-color: var(--color-dark-bg);
+            overflow: hidden; 
         }
 
-        /* 2. BACKGROUND VANTA.js */
+        /* 🔥 FIX LOADING: Menyembunyikan konten awal */
+        .hidden-until-loaded {
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out; 
+        }
+
+        /* ======================= VANTA.JS TARGET DIV (BACKGROUND) ======================= */
         #vanta-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -99;
+            background-color: var(--color-dark-bg);
+        }
+
+        /* ======================= SIDEBAR KIRI (FIXED) ======================= */
+        .cv-sidebar {
             position: fixed; 
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1; 
-            /* Fallback warna statis */
-            background-color: var(--bg-color); 
-        }
-
-        /* 3. KONTEN UTAMA */
-        .main-content {
-            position: relative; 
-            width: 100%;
-            min-height: 100vh; 
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; 
+            width: 25%; 
+            height: 100vh; 
+            background-color: rgba(0, 0, 0, 0); 
+            color: var(--color-main);
+            padding: 40px 30px;
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0);
             z-index: 10; 
-            padding: 40px 20px;
-        }
-
-        .resume-container {
-            width: 100%;
-            max-width: 1200px;
-            background: var(--container-bg); 
-            padding: 40px;
-            border-radius: 12px;
-            /* Efek Kaca Buram Standar Desktop */
-            backdrop-filter: blur(8px); 
-            -webkit-backdrop-filter: blur(8px);
-            box-shadow: 0 4px 40px var(--shadow-color); 
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        /* 4. TYPOGRAPHY & HEADER */
-        h1 { 
-            font-size: 3em; 
-            margin-bottom: 5px; 
-            color: var(--accent-color); 
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); 
-            font-family: 'Unbounded', sans-serif;
-            font-weight: 700;
-        }
-        .role {  font-size: 1.3em; font-weight: 400; margin-bottom: 25px; color: #333; }
-        .summary {  font-size: 1.1em; margin-bottom: 25px; padding-bottom: 10px; border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
-        a { color: var(--accent-color); text-decoration: none; transition: color 0.3s; }
-        a:hover { color: var(--accent-dark); }
-        hr { border-color: rgba(0, 0, 0, 0.1); margin: 30px 0; }
-        
-        /* Profile */
-        .profile-info {
-            display: flex;
-            align-items: center;
-            gap: 20px; 
-            margin-bottom: 25px; 
-        }
-        .profile-photo {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--accent-color);
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-        }
-
-        /* 5. GRID SKILLS & KONTAK */
-        .details-layout {
-            display: grid;
-            grid-template-columns: 1.5fr 1fr; 
-            gap: 40px;
-        }
-
-        /* Styling Skill Tags */
-        .skill-tags {
-            display: flex;
-            flex-wrap: wrap; 
-            gap: 10px; 
-            margin-top: 10px;
         }
         
-        .skill-tags span {
-            background-color: var(--accent-color);
-            color: white;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            font-weight: 500;
-            transition: background-color 0.3s, transform 0.2s;
-            cursor: default;
-        }
-
-        .skill-tags span:hover {
-            background-color: var(--accent-dark);
-            transform: translateY(-2px);
-        }
-
-        /* 6. BACKGROUND ASIMETRIS WEB3 */
-        .info-section, .experience-section {
-            position: relative; 
-            z-index: 1; 
-        }
-        
-        /* Kontainer yang membungkus Collapse */
-        .info-section-bg {
-            position: relative;
-            padding: 30px 0; 
-            margin-bottom: 20px;
-        }
-        
-        .info-section-bg::before {
-            content: '';
-            position: absolute;
-            top: -5px;
-            left: -10px;
-            right: -10px;
-            bottom: -5px;
-            background: rgba(135, 0, 210, 0.05); 
-            border-radius: 25px;
-            
-            /* Efek Asimetris dan Blur Kunci Web3 Desktop */
-            transform: rotate(-1.5deg); 
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            border: 1px solid rgba(135, 0, 210, 0.2); 
-            z-index: -1;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .info-section-bg:hover::before {
-            transform: rotate(-0.5deg);
-            box-shadow: 0 5px 30px rgba(135, 0, 210, 0.2);
-        }
-
-        /* 7. COLLAPSIBLE & ANIMATION FIX */
-        .main-collapse-wrapper { margin-top: 0; }
-        .main-collapse-wrapper > summary {
-            cursor: pointer;
-            list-style: none; 
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--accent-color); 
-            position: relative;
-            outline: none;
-            display: block; 
-            z-index: 2;
-        }
-
-        .main-collapse-wrapper > summary::-webkit-details-marker { display: none; }
-
-        .main-collapse-wrapper summary h2 {  
-            font-size: 1.8em; 
-            color: var(--accent-color); 
-            margin: 0 !important;
-            padding: 0 !important;
-            display: inline-block;
-        }
-        .main-collapse-wrapper > summary::after {
-            content: " [+]";
-            font-weight: bold;
-            color: var(--accent-color);
-            position: absolute;
-            right: 0;
-            top: 50%; 
-            transform: translateY(-50%);
+        /* Navigasi */
+        .sidebar-name { font-size: 2.8em; color: var(--color-accent); margin-bottom: 5px; font-weight: 900; }
+        .sidebar-title { font-size: 1.2em; margin-bottom: 40px; opacity: 0.8; font-weight: 300; }
+        .sidebar-nav { margin-top: 100px; }
+        .sidebar-nav a {
+            display: block;
+            color: var(--color-main);
+            text-decoration: none;
+            padding: 8px 0;
+            font-size: 1.8em;
+            border-left: 3px solid transparent;
+            padding-left: 10px;
             transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sidebar-nav a.active {
+            color: var(--color-accent);
+            border-left: 3px solid var(--color-accent);
+            font-weight: 900;
         }
 
-        .main-collapse-wrapper[open] > summary::after { content: " [-]"; }
-        
-        /* Animasi yang dikontrol JS */
-        .content-wrapper {
-            height: 0;
-            overflow: hidden;
-            transition: height 0.4s ease-out, padding-top 0.4s ease-out;
-            padding-top: 0; 
-            box-sizing: content-box; 
-        }
-        
-        /* Class tambahan dari JS */
-        .main-collapse-wrapper.is-open > .content-wrapper {
-            padding-top: 10px; 
+        /* --- KONTEN KANAN (AREA FULLPAGE) --- */
+        #fullpage-wrapper {
+            width: 75%; 
+            margin-left: 25%; 
         }
 
-        /* 8. EXPERIENCE GRID (KONSEP 12 KOLOM) */
-        .job-entry {
-            margin-bottom: 25px; 
-            padding-bottom: 15px;
-            border-left: 3px solid rgba(135, 0, 210, 0.2); 
-            padding-left: 20px;
-            position: relative;
+        /* --- STYLE SEKSI KONTEN --- */
+        .section {
+            padding: 50px !important; 
+            text-align: left !important; 
         }
         
-        /* Titik Timeline */
-        .job-entry::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 15px;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: var(--accent-color);
-            transform: translateX(-50%);
-            box-shadow: 0 0 5px var(--accent-color);
+        .fp-tableCell {
+            vertical-align: top !important;
+            height: 100% !important; 
+            padding: 40px 80px 0 80px; 
+            background-color: rgba(0, 0, 0, 0.9); 
+            border-left: 1px solid rgba(0, 255, 194, 0.2);
         }
-
-        /* Kontainer Grid: 3fr (Waktu) dan 9fr (Detail) */
-        .job-grid {
-            display: grid;
-            grid-template-columns: 3fr 9fr; 
-            gap: 20px;
-        }
-
-        .job-date-col {
-            font-size: 0.9em;
-            font-weight: 700;
-            color: var(--accent-dark);
+        
+        .section h2 {
+            font-size: 5em; 
+            font-weight: 900; 
+            color: var(--color-accent);
+            border-bottom: 5px solid var(--color-accent); 
+            display: block; 
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+            line-height: 1;
             text-transform: uppercase;
-            padding-top: 10px;
         }
         
-        /* 9. RESPONSIVENESS FIX & MOBILE OPTIMIZATION */
-        @media (max-width: 768px) {
-            .resume-container { 
-                padding: 25px; 
-                /* Kurangi blur di mobile untuk performa */
-                backdrop-filter: blur(3px); 
-                -webkit-backdrop-filter: blur(3px);
+        /* SCROLLER Diaktifkan FullPage.js lagi */
+        .fp-scroller {
+             max-height: 100vh !important;
+             overflow: auto !important;
+             padding-bottom: 120px;
+        }
+
+        /* Kustomisasi Scrollbar (Webkit: Chrome, Safari) */
+        .fp-scroller::-webkit-scrollbar {
+            width: 8px; 
+        }
+        .fp-scroller::-webkit-scrollbar-track {
+            background: #000000; 
+        }
+        .fp-scroller::-webkit-scrollbar-thumb {
+            background: var(--color-accent); 
+            border-radius: 4px;
+        }
+
+        /* Konten Pengalaman Kerja */
+        .job-wrapper { padding: 20px 0; border-bottom: 1px dashed rgba(255, 255, 255, 0.2); }
+        .job-wrapper:last-of-type { border-bottom: none; }
+        .job-wrapper strong { 
+            font-size: 1.5em; 
+            color: var(--color-accent); 
+            display: block; 
+            margin-bottom: 5px; 
+            font-weight: 700;
+        }
+        .job-wrapper p { font-size: 1em; margin-bottom: 5px; }
+        .job-wrapper ul { margin-left: 20px; margin-top: 10px; }
+        .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 20px; }
+
+
+        /* ========================================================= */
+        /* 🔥 MEDIA QUERY KHUSUS UNTUK PRINT / CETAK (1 Halaman A4) */
+        /* ========================================================= */
+        @media print {
+            /* 1. Atur Ulang Body dan FullPage.js untuk Cetak */
+            body {
+                background-color: #FFFFFF !important; /* Latar Putih */
+                overflow: visible !important;
             }
-            h1 { font-size: 2.2em; }
-            .details-layout { grid-template-columns: 1fr; } 
+            .fp-viewing {
+                overflow: visible !important;
+            }
             
-            /* Background Asimetris di Mobile */
-            .info-section-bg::before {
-                transform: rotate(0deg); 
-                border-radius: 10px;
-                left: 0;
-                right: 0;
-                /* Kurangi blur di background section */
-                backdrop-filter: blur(3px);
-                -webkit-backdrop-filter: blur(3px);
+            /* 2. Sembunyikan Elemen Tidak Penting */
+            #vanta-background, 
+            .cv-sidebar {
+                display: none !important;
+            }
+
+            /* 3. Atur Ulang Kontainer Utama */
+            #fullpage-wrapper {
+                width: 100% !important; /* Ambil seluruh lebar */
+                margin-left: 0 !important; /* Hapus margin sidebar */
+                padding: 0 !important;
+            }
+
+            /* 4. Atur Section agar Tidak Ada Snapping/Tinggi Penuh */
+            .section {
+                height: auto !important; /* Tinggi menyesuaikan konten */
+                min-height: 0 !important;
+                position: static !important; /* Hilangkan posisi FullPage.js */
+                margin-bottom: 30px; 
+                padding: 0 40px !important; /* Beri padding di kertas */
             }
             
-            /* Grid Pengalaman Kerja (Mobile) */
-            .job-grid {
-                grid-template-columns: 1fr; 
-                gap: 5px;
+            /* 5. Atur Ulang Konten (fp-tableCell) */
+            .fp-tableCell {
+                display: block !important;
+                padding: 0 !important; 
+                border-left: none !important;
+                width: 100% !important;
+                background-color: transparent !important; /* Hapus background gelap */
+                color: #000000 !important; /* Paksa teks hitam */
             }
-            .job-date-col {
-                order: 2; color: #888; font-size: 0.85em; font-weight: 400;
-                padding-top: 0; margin-top: -5px; 
+
+            /* 6. Header Section (agar terbaca) */
+            .section h2 {
+                color: #333333 !important; 
+                border-bottom: 2px solid #000000 !important;
+                font-size: 2em !important; 
+                margin-bottom: 15px !important;
             }
-            .job-detail-col { order: 1; overflow: hidden; }
+            
+            /* 7. Atur Ulang Scrollbar (fp-scroller) */
+            .fp-scroller {
+                 max-height: none !important;
+                 overflow: visible !important;
+                 padding-bottom: 0 !important;
+            }
+
+            /* 8. Pengalaman Kerja (Job Wrapper) - Set ke Hitam */
+            .job-wrapper {
+                color: #000000 !important;
+                border-bottom: 1px dashed #cccccc !important;
+            }
+            .job-wrapper strong {
+                 color: #000000 !important;
+            }
+
+            /* 9. Fix Kertas A4 */
+            @page {
+                size: A4;
+                margin: 20mm;
+            }
         }
     </style>
 </head>
 <body>
-
+    
     <div id="vanta-background"></div>
 
-    <div class="main-content">
-        <div class="resume-container">
-            
-            <header class="resume-header">
-                <div class="profile-info">
-                    <img src="https://i.imgur.com/z47xQnN.png" alt="Foto Profil Ardi Setiyawan" class="profile-photo"> 
+    <aside class="cv-sidebar hidden-until-loaded">
+        <h1 class="sidebar-name">ARDI SETIYAWAN</h1>
+        <p class="sidebar-title">Staff Akuntansi (SAP FI-CO)</p>
+
+        <nav class="sidebar-nav">
+            <a data-menuanchor="about" class="nav-item active" href="#about">TENTANG SAYA</a>
+            <a data-menuanchor="skills" class="nav-item" href="#skills">KEAHLIAN</a>
+            <a data-menuanchor="education" class="nav-item" href="#education">PENDIDIKAN</a>
+            <a data-menuanchor="experience" class="nav-item" href="#experience">PENGALAMAN KERJA</a>
+        </nav>
+    </aside>
+
+    <div id="fullpage-wrapper" class="hidden-until-loaded">
+
+        <div class="section" data-anchor="about"> 
+            <div class="fp-scroller">
+                <h2>TENTANG SAYA</h2>
+                <p>Staff Akuntansi dengan lebih kurang lebih 2 tahun pengalaman dalam pengelolaan pembukuan, pelaporan keuangan bulanan, dan dapat menggunakan sistem ERP SAP (modul FI-CO) pada proyek konstruksi. Pekerjaan saya dimulai dari menjadi Officeboy selama kurang lebih 3 tahun, kemudian setelah menjadi Administrasi Teknik. Selanjutnya menjadi Admin finance, Cashier hingga Akuntansi.</p>
+                <div class="contact-info" style="margin-top: 20px;">
+                    <p>🖂  Ardi4setiyawan@gmail.com</p>
+                    <p>✆  (+62) 81808446xxx</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section" data-anchor="skills"> 
+            <div class="fp-scroller">
+                <h2>KEAHLIAN</h2>
+                <div class="skills-grid">
                     <div>
-                        <h1>ARDI SETIYAWAN</h1>
-                        <p class="role">Staff Akuntansi (SAP FI-CO Specialist)</p> 
+                        <h3>Teknis :</h3>
+                        <ul>
+                            <li>Pembukuan transaksi keuangan</li>
+                            <li>Laporan keuangan</li>
+                            <li>Administrasi Proyek</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Pendukung :</h3>
+                        <ul>
+                            <li>Sistem ERP SAP (FI-CO)</li>
+                            <li>Microsoft Excel</li>
+                        </ul>
                     </div>
                 </div>
-                <p class="summary">Staff Akuntansi dengan lebih dari 2 tahun pengalaman intensif dalam pengelolaan pembukuan, pelaporan keuangan mingguan/bulanan, dan mahir menggunakan sistem ERP SAP (modul FI-CO) pada proyek konstruksi.</p> 
-            </header>
-            
-            <section class="info-section">
-                <div class="info-section-bg">
-                    <details class="main-collapse-wrapper" open>
-                        <summary>
-                            <h2>Skills & Kontak</h2>
-                        </summary>
-                        <div class="content-wrapper">
-                            <div class="details-layout">
-                                
-                                <div class="skills">
-                                    <h3>Keahlian Teknis</h3>
-                                    <div class="skill-tags">
-                                        <span>Pembukuan Transaksi</span>
-                                        <span>Laporan Keuangan</span>
-                                        <span>Microsoft Excel</span>
-                                        <span>Sistem ERP SAP (FI-CO)</span>
-                                        <span>Pajak (PPH)</span>
-                                        <span>Administrasi Proyek</span>
-                                    </div>
-                                </div>
-
-                                <div class="contact">
-                                    <h3>Kontak</h3>
-                                    <p>Email: <a href="mailto:ardi4setiyawan@gmail.com">ardi4setiyawan@gmail.com</a></p>
-                                    <p>Telepon: +62 812-XXXX-XXXX</p>
-                                </div>
-                            </div>
-                        </div>
-                    </details>
-                </div>
-            </section>
-            
-            <hr>
-            
-            <section class="experience-section">
-                <div class="info-section-bg">
-                    <details class="main-collapse-wrapper">
-                        <summary>
-                            <h2>Pengalaman Kerja</h2>
-                        </summary>
-                        <div class="content-wrapper">
-                            
-                            <div class="job-entry">
-                                <div class="job-grid"> 
-                                    <div class="job-date-col">Oktober 2024 - Sekarang</div>
-                                    <div class="job-detail-col">
-                                        <h3>Staf Akuntansi - PT. Adhi Karya (Persero) Tbk, Proyek IKK Plant Road & Drainage Phase 1 Karawang</h3>
-                                        <ul>
-                                            <li>Mengelola pembukuan seluruh transaksi proyek.</li>
-                                            <li>Membuat dan menyusun laporan keuangan mingguan dan bulanan.</li>
-                                            <li>Mengecek dan memastikan kesesuaian data input dengan sistem ERP SAP FI-CO.</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="job-entry">
-                                <div class="job-grid"> 
-                                    <div class="job-date-col">Juni 2022 - Oktober 2024</div>
-                                    <div class="job-detail-col">
-                                        <h3>Cashier & Staf SDM - PT. Adhi Karya (Persero) Tbk, Proyek IKK Plant Road & Drainage Phase 1 Karawang</h3>
-                                        <ul>
-                                            <li>Melakukan transaksi pembayaran vendor, dll berikut monitoring.</li>
-                                            <li>Mengelola Kas Kecil.</li>
-                                            <li>Membuat & Memperbaharui Kontrak Kerja.</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="job-entry">
-                                <div class="job-grid"> 
-                                    <div class="job-date-col">Januari 2022 - Juni 2022</div>
-                                    <div class="job-detail-col">
-                                        <h3>Staf Admin Finance - PT. Jaya Konstruksi - BRP - APTA, Proyek Penanggulangan banjir Pekalongan</h3>
-                                        <ul>
-                                            <li>Melakukan transaksi pembayaran vendor.</li>
-                                            <li>Melakukan Input transaksi ke sistem.</li>
-                                            <li>Melakukan pengarsipan baik *softcopy* maupun *hardcopy*.</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="job-entry">
-                                <div class="job-grid"> 
-                                    <div class="job-date-col">Januari 2020 - Desember 2022</div>
-                                    <div class="job-detail-col">
-                                        <h3>Staf Admin ME - Jaya Konstruksi - ADHI, KSO, Proyek Tol Ruas 6A Jakarta</h3>
-                                        <ul>
-                                            <li>Melakukan pencatatan kegiatan pekerjaan harian dan Mengumpulkan dokumentasi Pekerjaan ME.</li>
-                                            <li>Membuat Permit of Work sebelum pekerjaan dilaksanakan.</li>
-                                            <li>Membuat laporan harian.</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="job-entry">
-                                <div class="job-grid"> 
-                                    <div class="job-date-col">Januari 2017 - Desember 2020</div>
-                                    <div class="job-detail-col">
-                                        <h3>Staf Admin Teknik - PT. Adhi Karya (Persero) Tbk, Proyek Bendung Cidanau - Cipasauran, Banten</h3>
-                                        <ul>
-                                            <li>Melakukan pencatatan kegiatan pekerjaan harian dan Mengumpulkan dokumentasi Pekerjaan. </li>
-                                            <li>Membuat Permit of Work sebelum pekerjaan dilaksanakan.</li>
-                                            <li>Membuat laporan harian, dan menyusun laporan mingguan.</li>
-                                            <li>Mengurus dokumen masuk dan keluar (surat, *drawing*, dll).</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="job-entry">
-                                <div class="job-grid"> 
-                                    <div class="job-date-col">Sebelum Jan 2017</div>
-                                    <div class="job-detail-col">
-                                        <h3>Staf Admin Teknik - PT. Adhi Karya (Persero) Tbk, Proyek Dermaga 004 Jakarta Utara</h3>
-                                        <ul>
-                                            <li>Melakukan pencatatan kegiatan pekerjaan harian dan Mengumpulkan dokumentasi Pekerjaan. </li>
-                                            <li>Membuat Permit of Work sebelum pekerjaan dilaksanakan.</li>
-                                            <li>Membuat laporan harian, dan menyusun laporan mingguan.</li>
-                                            <li>Mengurus dokumen masuk dan keluar (surat, *drawing*, dll).</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="job-entry">
-                                <div class="job-grid"> 
-                                    <div class="job-date-col">3 Tahun Awal</div>
-                                    <div class="job-detail-col">
-                                        <h3>Office Boy - Beberapa Proyek PT. Adhi Karya (Persero) Tbk</h3>
-                                        <ul>
-                                            <li>Bertugas sebagai *Office Boy* pada Proyek Dermaga 102, 103, 104 dan Proyek Pembangunan Terminal Petikemas Koja.</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                        </div>
-                    </details>
-                </div>
-                
-                <div class="info-section-bg">
-                    <details class="main-collapse-wrapper">
-                        <summary>
-                            <h2>Pendidikan</h2>
-                        </summary>
-                        <div class="content-wrapper">
-                            <div class="job-entry" style="border-left: none;"> <div class="job-grid"> 
-                                    <div class="job-date-col">2020 - 2025</div>
-                                    <div class="job-detail-col">
-                                        <h3>Sarjana Akuntansi - Universitas Terbuka</h3>
-                                        <p>IPK 3.47</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </details>
-                </div>
-            </section>
-            
+            </div>
         </div>
+
+        <div class="section" data-anchor="education">
+            <div class="fp-scroller">
+                <h2>PENDIDIKAN</h2>
+                <div class="job-wrapper" style="border-bottom: none;">
+                    <strong>Universitas Terbuka, Jakarta</strong>
+                    <p>2020 - 2025</p>
+                    <p>Sarjana Akuntansi - IPK 3.47</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="experience" class="section" data-anchor="experience"> 
+            <div class="fp-scroller">
+                <h2>PENGALAMAN KERJA</h2>
+                
+                <div class="job-wrapper">
+                    <strong>Staf Akuntansi</strong>
+                    <p>PT. Adhi Karya (Persero) Tbk, Proyek Estate Management IKN (Okt 2022 - Sekarang)</p>
+                    <ul>
+                        <li>Mengelola pembukuan seluruh transaksi proyek.</li>
+                        <li>Menyiapkan laporan keuangan bulanan.</li>
+                        <li>Mengecek dan memastikan kesesuaian data input dengan sistem ERP SAP FI-CO.</li>
+                        <li>Melakukan Kegiatan Pengarsipan seluruh transaksi</li>
+                    </ul>
+                </div>
+                <div class="job-wrapper">
+                    <strong>Cashier & Staf SDM</strong>
+                    <p>PT. Adhi Karya (Persero) Tbk (Juni 2022 - Okt 2024)</p>
+                    <p>Proyek Estate Managemen IKN, Penajam Paser Utara, Kalimantan Timur</p>
+                    <ul>
+                        <li>Melakukan transaksi pembayaran vendor, dll berikut monitoring.</li>
+                        <li>Mengelola Kas Kecil.</li>
+                        <li>Membantu Pekerjaan Akuntansi.</li>
+                        <li>Membuat & Memperbaharui Kontrak Kerja.</li>
+                        <li>Melakukan Kegiatan Pengarsipan seluruh transaksi</li>
+                    </ul>
+                </div>
+                <div class="job-wrapper">
+                    <strong>Staf Admin Finance</strong>
+                    <p>PT. Jaya Konstruksi (Januari 2022 - Juni 2022)</p>
+                    <p>Proyek Penanggulangan Banjir Pesisir, Pekalongan, Jawa Tengah</p>
+                    <ul>
+                        <li>Melakukan transaksi pembayaran vendor.</li>
+                        <li>Melakukan input transaksi ke sistem.</li>
+                    </ul>
+                </div>
+                <div class="job-wrapper">
+                    <strong>Staf Admin ME</strong>
+                    <p>Jaya Konstruksi - ADHI, KSO (Januari 2020 - Desember 2022)</p>
+                    <p>Kelapa Gading, Jakarta Utara</p>
+                    <ul>
+                        <li>Menyiapkan Permit of Work.</li>
+                        <li>Melakukan pencatatan kegiatan pekerjaan harian.</li>
+                        <li>Membuat laporan harian.</li>
+                    </ul>
+                </div>
+                <div class="job-wrapper">
+                    <strong>Staf Admin Teknik</strong>
+                    <p>PT. Adhi Karya (Persero) Tbk (2015 - 2020)</p>
+                    <p>Proyek WTP Cidanau & Bendung Cipasauran, Anyer Banten</p>
+                    <ul>
+                        <li>Mengurus dokumen masuk dan keluar (surat menyurat, soft drawing, asbuilt drawing, dll).</li>
+                        <li>Menyiapkan Permit of Work.</li>
+                        <li>Melakukan pencatatan kegiatan pekerjaan harian.</li>
+                        <li>Membuat laporan harian.</li>
+                    </ul>
+                </div>
+                <div class="job-wrapper">
+                    <strong>Staf Admin Teknik</strong>
+                    <p>PT. Adhi Karya (Persero) Tbk (2015 - 2017)</p>
+                    <p>Proyek Dermaga 004 peindo II, Tanjung Priok, Jakarta Utara</p>
+                    <ul>
+                        <li>Mengurus dokumen masuk dan keluar (surat menyurat, soft drawing, asbuilt drawing, dll).</li>
+                        <li>Menyiapkan Permit of Work.</li>
+                        <li>Melakukan pencatatan kegiatan pekerjaan harian.</li>
+                        <li>Membuat laporan harian.</li>
+                    </ul>
+                </div>
+                <div class="job-wrapper" style="border-bottom: none;">
+                    <strong>Office Boy</strong>
+                    <p>PT. Adhi Karya (Persero) Tbk (2012 - 2015)</p>
+                    <p>Proyek Dermaga 102, 103, & 104 Pelindo II, Tanjung Priok, Jakarta Utara</p>
+                    <p>Proyek Terminal Petikemas Koja, Tanjung Priok, Jakarta Utara</p>
+                </div>
+            </div>
+        </div>
+
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.22/fullpage.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.22/fullpage.scrollable.min.js"></script>
+
     <script>
-    // ==================================
-    // JAVASCRIPT UNTUK SMOOTH SLIDE & OPTIMASI VANTA
-    // ==================================
-    document.addEventListener('DOMContentLoaded', () => {
-        
-        // ==================================
-        // 1. OPTIMASI VANTA.JS (DYNAMIC LOADING DENGAN KONFIGURASI MOBILE)
-        // ==================================
-        function loadScript(url, callback) {
-            const script = document.createElement('script');
-            script.src = url;
-            script.async = false; 
-            if (callback) {
-                script.onload = callback;
-            }
-            document.head.appendChild(script);
-        }
-
-        // Konfigurasi Vanta.js default (Desktop)
-        let vantaConfig = {
-            el: "#vanta-background", 
-            mouseControls: true,
-            touchControls: true,
-            gyroControls: false,
-            minHeight: 200.00,
-            minWidth: 200.00,
-            color: 0x8700d2,      
-            color2: 0x4e17d4,      
-            backgroundColor: 0xfdfdff,
-            scale: 1.00,
-            scaleMobile: 1.00 
-        };
-
-        // Atur skala lebih rendah untuk mobile (dibawah 768px)
-        if (window.innerWidth <= 768) {
-            vantaConfig.scale = 0.50;      // Kurangi skala objek 3D di HP
-            vantaConfig.scaleMobile = 0.50; // Kurangi skala objek 3D di HP
-        }
-
-        // Muat Three.js, lalu Vanta.js, lalu inisialisasi Vanta
-        loadScript("https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js", () => {
-            loadScript("https://cdn.jsdelivr.net/gh/tengbao/vanta@latest/dist/vanta.globe.min.js", () => {
-                VANTA.GLOBE(vantaConfig);
-            });
-        });
-        
-        // ==================================
-        // 2. JAVASCRIPT UNTUK SMOOTH SLIDE
-        // ==================================
-        const detailsElements = document.querySelectorAll('.main-collapse-wrapper');
-
-        detailsElements.forEach(details => {
-            const content = details.querySelector('.content-wrapper');
-
-            // Set state awal
-            if (details.open) {
-                content.style.height = 'auto'; 
-                details.classList.add('is-open'); 
-            } else {
-                content.style.height = '0';
-            }
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const sidebar = document.querySelector('.cv-sidebar');
+            const wrapper = document.querySelector('#fullpage-wrapper');
             
-            details.addEventListener('click', (event) => {
-                const isSummary = event.target.closest('summary');
-                if (!isSummary) return;
+            // Fungsi untuk menampilkan konten dengan fade-in
+            const showContent = () => {
+                sidebar.classList.remove('hidden-until-loaded');
+                wrapper.classList.remove('hidden-until-loaded');
+            };
 
-                event.preventDefault(); 
+            // 1. INISIALISASI VANTA.JS
+            VANTA.HALO({
+              el: "#vanta-background", 
+              mouseControls: true,
+              touchControls: true,
+              gyroControls: false,
+              minHeight: 200.00,
+              minWidth: 200.00,
+              baseColor: 0x000000, 
+              color1: 0x00FFC2,
+              color2: 0x00FFC2,
+              size: 1.00,
+            });
 
-                if (details.open) {
-                    closeDetails(details, content);
-                } else {
-                    openDetails(details, content);
+            // 2. INISIALISASI FULLPAGE.JS
+            new fullpage('#fullpage-wrapper', {
+                licenseKey: 'gplv3-license', 
+                
+                // KUNCI: MEMATIKAN SEMUA INPUT SCROLL
+                autoScrolling: true,          
+                mouseWheel: false,            
+                keyboardScrolling: false,     
+                touchSensitivity: 100,        
+                
+                // Konten Panjang
+                scrollOverflow: true, 
+                scrollBar: true, 
+                
+                // Navigasi via Menu
+                menu: '.sidebar-nav',
+                anchors: ['about', 'skills', 'education', 'experience'], 
+                fitToSection: true,
+                scrollingSpeed: 700, 
+                
+                navigation: false,
+                verticalCentered: false,
+                bigSectionsDestination: 'top', 
+
+                // 🔥 PENTING: Tampilkan konten setelah FullPage.js Selesai Render
+                afterRender: function() {
+                    showContent();
+                },
+                
+                afterLoad: function(origin, destination, direction, trigger) {
+                    const navItems = document.querySelectorAll('.sidebar-nav a');
+                    const targetAnchor = destination.anchor;
+                    
+                    navItems.forEach(item => item.classList.remove('active'));
+                    document.querySelector(`.sidebar-nav a[data-menuanchor="${targetAnchor}"]`).classList.add('active');
                 }
             });
-
-            function openDetails(detailsElement, contentElement) {
-                detailsElement.open = true;
-                detailsElement.classList.add('is-open'); 
-
-                const fullHeight = contentElement.scrollHeight; 
-                contentElement.style.height = '0';
-                
-                requestAnimationFrame(() => {
-                    contentElement.style.height = fullHeight + 'px';
-                });
-
-                contentElement.addEventListener('transitionend', function handler() {
-                    contentElement.style.height = 'auto';
-                    contentElement.removeEventListener('transitionend', handler);
-                }, { once: true });
-            }
-
-            function closeDetails(detailsElement, contentElement) {
-                contentElement.style.height = contentElement.scrollHeight + 'px';
-
-                requestAnimationFrame(() => {
-                    contentElement.style.height = '0';
-                });
-                
-                detailsElement.classList.remove('is-open');
-
-                contentElement.addEventListener('transitionend', function handler() {
-                    detailsElement.open = false;
-                    contentElement.removeEventListener('transitionend', handler);
-                }, { once: true });
-            }
         });
-    });
-    </script> 
-
+    </script>
 </body>
 </html>
